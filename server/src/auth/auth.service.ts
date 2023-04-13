@@ -43,7 +43,7 @@ export class AuthService {
 				user: { ...payload }
 			};
 		} else {
-			throw new UnauthorizedException('Incorrect login credentials!');
+			throw new NotAcceptableException('Incorrect login credentials!');
 		}
 	}
 
@@ -64,7 +64,7 @@ export class AuthService {
 			const hashedToken = await hash(refreshToken);
 			this.userService.updateHashedToken(id, hashedToken);
 
-			return { refreshToken, accessToken };
+			return { refreshToken, accessToken, role, email, id };
 		} else {
 			throw new UnauthorizedException('Incorrect login credentials!');
 		}
@@ -122,7 +122,7 @@ export class AuthService {
 		}
 
 		const userByEmail = await this.userService.findByEmail(email);
-		
+
 		if (userByEmail) {
 			throw new NotAcceptableException(
 				'The account with the provided email currently exists. Please choose another one.'
