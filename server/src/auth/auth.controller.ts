@@ -45,6 +45,8 @@ export class AuthController {
 	@Get('logout')
 	@UseGuards(RefreshAuthGuard)
 	logout(@Request() req, @Response({ passthrough: true }) res) {
+		console.log('req.user: ', req.user);
+
 		const { sub, refresh_token } = req.user;
 
 		this.authService.logout(sub, refresh_token);
@@ -57,10 +59,28 @@ export class AuthController {
 	async refresh(@Request() req, @Response({ passthrough: true }) res) {
 		const { sub, refresh_token } = req.user;
 
-		const { refreshToken, accessToken } = await this.authService.refresh(
-			sub,
-			refresh_token
-		);
+		const { refreshToken, accessToken, role, email, id } =
+			await this.authService.refresh(sub, refresh_token);
+
+		res.cookie('refresh_token', refreshToken, {
+			httpOnly: true,
+			expires: this.configService.get<number>('COOKIE_EXPIRES_TIME'),
+			maxAge: this.configService.get<number>('COOKIE_MAX_AGE')
+		});
+		console.log(role, email);
+		
+		return { refreshToken, accessToken, user: { role, email, id } };
+	}
+
+	@Get('google')
+	@UseGuards(GoogleAuthGuard)
+	googleLogin() {}
+
+	@Get('google/redirect')
+	@UseGuards(GoogleAuthGuard)
+	async googleRedirect(@Request() req, @Response({ passthrough: true }) res) {
+		const { refreshToken, accessToken, user } =
+			await this.authService.signInWithGoogle(req.user);
 
 		res.cookie('refresh_token', refreshToken, {
 			httpOnly: true,
@@ -68,22 +88,13 @@ export class AuthController {
 			maxAge: this.configService.get<number>('COOKIE_MAX_AGE')
 		});
 
-		return { refreshToken, accessToken };
-	}
-
-	@Get('google')
-	@UseGuards(GoogleAuthGuard)
-	googleLogin(){}
-	
-	@Get('google/redirect')
-	@UseGuards(GoogleAuthGuard)
-	async googleRedirect(@Request() req){
-		return await this.authService.signInWithGoogle(req.user)
+		res.redirect('http://localhost:3000/');
 	}
 
 	@Get('profile')
+	@UseGuards(RefreshAuthGuard)
 	@UseGuards(JwtAuthGuard)
-	profile(){
-		return 'somedata'
+	profile() {
+		return { message: 'somedata' };
 	}
 }
