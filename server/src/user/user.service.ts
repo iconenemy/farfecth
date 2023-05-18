@@ -1,11 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { NotAcceptableException } from '@nestjs/common/exceptions';
 import { InjectRepository } from '@nestjs/typeorm';
 import { hash } from 'argon2';
 import { RegisterDto, RegisterWithGoogleDto } from 'src/auth/dto/auth.dto';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { UpdateUserDto } from './dto/user.dto';
 
+import { UpdateUserDto } from './dto/user.dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -14,10 +14,6 @@ export class UserService {
 		@InjectRepository(User)
 		private readonly userRepository: Repository<User>
 	) {}
-
-	findById(id: string): Promise<User> {
-		return this.userRepository.findOneBy({ id });
-	}
 
 	findByEmail(email: string): Promise<User> {
 		return this.userRepository.findOneBy({ email });
@@ -32,7 +28,41 @@ export class UserService {
 	}
 
 	findAll(): Promise<User[]> {
-		return this.userRepository.find();
+		return this.userRepository.find({
+			select: {
+				id: true,
+				first_name: true,
+				last_name: true,
+				email: true,
+				phone_number: true,
+				is_active: true,
+				role: true
+			},
+			order: {
+				id: 'ASC'
+			},
+			take: 10,
+			where: {
+				role: 'guest'
+			}
+		});
+	}
+
+	findById(id: string): Promise<User> {
+		return this.userRepository.findOne({ 
+			where: { 
+				id 
+			}, 
+			select: { 
+				id: true,
+				first_name: true,
+				last_name: true,
+				email: true,
+				phone_number: true,
+				is_active: true,
+				role: true
+			} 
+		});
 	}
 
 	async create(payload: RegisterDto): Promise<User> {

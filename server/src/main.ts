@@ -8,12 +8,11 @@ const bootstrap = async () => {
 		const PORT = process.env.PORT;
 
 		const appOtions = { cors: {
-			origin: 'http://localhost:3000',
+			origin: true,
 			credentials: true,
 		} };
 
 		const app = await NestFactory.create(AppModule, appOtions);
-
 		app.use(cookieParser());
 		app.setGlobalPrefix('api');
 		app.useGlobalPipes(new ValidationPipe({ forbidUnknownValues: true }));
