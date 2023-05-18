@@ -5,12 +5,11 @@ import {
   FetchBaseQueryError,
   createApi,
 } from "@reduxjs/toolkit/query/react";
-
 import { Mutex } from "async-mutex";
 
 import { logout, tokenReceived } from "../../features/auth/authSlice";
-import { IAuth, IUser, IRefreshResonse } from "../../features/auth/authType";
-import { RootState } from "../store";
+import { IResRefresh } from "../../features/auth/authType";
+import { RootState, persistor } from "../store";
 
 const mutex = new Mutex();
 
@@ -18,7 +17,7 @@ const baseQuery = fetchBaseQuery({
   baseUrl: "http://localhost:5000/api",
   credentials: "include",
   prepareHeaders: (headers: Headers, { getState }) => {
-    const accessToken = (getState() as RootState).auth.accessToken;
+    const accessToken = (getState() as RootState).persistedReducer.auth.accessToken;
     if (accessToken) {
       headers.set("Authorization", `Bearer ${accessToken}`);
     }
@@ -44,14 +43,15 @@ const baseQueryWithRefresh: BaseQueryFn<
           api,
           extraOptions
         );
-        const tokens = refreshResult.data as IRefreshResonse;
+        const tokens = refreshResult.data as IResRefresh;
 
         if (tokens) {
           api.dispatch(tokenReceived(tokens));
           // retry the initial query
           result = await baseQuery(args, api, extraOptions);
         } else {
-          api.dispatch(logout());
+          api.dispatch(logout())
+          persistor.purge();
         }
       } finally {
         // release must be called once the mutex should be released again.
@@ -68,25 +68,12 @@ const baseQueryWithRefresh: BaseQueryFn<
 
 export const apiSlice = createApi({
   baseQuery: baseQueryWithRefresh,
-  endpoints: (build) => ({
-    loginUser: build.mutation<IAuth, IUser>({
-      query: (data) => ({
-        url: "auth/login",
-        method: "POST",
-        body: { ...data },
-      }),
-    }),
-    logoutUser: build.mutation<void, void>({
-      query: () => ({ url: "auth/logout" }),
-    }),
-    getProfile: build.mutation<string, void>({
-      query: () => ({ url: "auth/profile" }),
-    }),
+  tagTypes: ["Auth"],
+  endpoints: (builder) => ({
+    refresh: builder.query<IResRefresh, void>({
+      query: () => ({url: "auth/refresh"})
+    })
   }),
 });
 
-export const {
-  useLoginUserMutation,
-  useLogoutUserMutation,
-  useGetProfileMutation,
-} = apiSlice;
+export const { useRefreshQuery } = apiSlice;

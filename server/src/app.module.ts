@@ -5,6 +5,7 @@ import { TypeOrmModuleAsyncOptions, TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { ClothesModule } from './clothes/clothes.module';
 
 @Module({
 	imports: [
@@ -21,13 +22,13 @@ import { AuthModule } from './auth/auth.module';
 					password: configService.get('POSTGRES_PASSWORD'),
 					database: configService.get('POSTGRES_DATABASE'),
 					entities: [User],
-					synchronize: true,
-					keepConnectionAlive: true
+					synchronize: true					
 				} as TypeOrmModuleAsyncOptions;
 			}
 		}),
 		UserModule,
-		AuthModule
+		AuthModule,
+		ClothesModule,
 	],
 	controllers: [],
 	providers: [],

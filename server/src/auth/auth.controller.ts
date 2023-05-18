@@ -45,8 +45,6 @@ export class AuthController {
 	@Get('logout')
 	@UseGuards(RefreshAuthGuard)
 	logout(@Request() req, @Response({ passthrough: true }) res) {
-		console.log('req.user: ', req.user);
-
 		const { sub, refresh_token } = req.user;
 
 		this.authService.logout(sub, refresh_token);
@@ -67,8 +65,6 @@ export class AuthController {
 			expires: this.configService.get<number>('COOKIE_EXPIRES_TIME'),
 			maxAge: this.configService.get<number>('COOKIE_MAX_AGE')
 		});
-		console.log(role, email);
-		
 		return { refreshToken, accessToken, user: { role, email, id } };
 	}
 
@@ -79,7 +75,7 @@ export class AuthController {
 	@Get('google/redirect')
 	@UseGuards(GoogleAuthGuard)
 	async googleRedirect(@Request() req, @Response({ passthrough: true }) res) {
-		const { refreshToken, accessToken, user } =
+		const { refreshToken } =
 			await this.authService.signInWithGoogle(req.user);
 
 		res.cookie('refresh_token', refreshToken, {
@@ -88,13 +84,6 @@ export class AuthController {
 			maxAge: this.configService.get<number>('COOKIE_MAX_AGE')
 		});
 
-		res.redirect('http://localhost:3000/');
-	}
-
-	@Get('profile')
-	@UseGuards(RefreshAuthGuard)
-	@UseGuards(JwtAuthGuard)
-	profile() {
-		return { message: 'somedata' };
+		res.redirect(this.configService.get<string>('CLIENT_URL'));
 	}
 }

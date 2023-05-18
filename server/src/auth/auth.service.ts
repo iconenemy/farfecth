@@ -50,7 +50,7 @@ export class AuthService {
 	async refresh(id: string, token: string) {
 		if (!id || !token) {
 			throw new UnauthorizedException(
-				'The client does not have access rights to the content'
+				'The client does not have access rights to the content (refresh)'
 			);
 		}
 		const user = await this.userService.findById(id);
@@ -73,7 +73,7 @@ export class AuthService {
 	async logout(id: string, token: string) {
 		if (!id || !token) {
 			throw new UnauthorizedException(
-				'The client does not have access rights to the content'
+				'The client does not have access rights to the content (logout)'
 			);
 		}
 		await this.userService.updateHashedToken(id, null);
