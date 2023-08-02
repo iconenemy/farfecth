@@ -9,6 +9,7 @@ import {
 
 const Auth = () => {
   const [active, setActive] = useState<boolean>(false);
+  
   return (
     <div className="w-full pt-12 px-28 pb-28 flex justify-between flex-wrap">
       <Login />

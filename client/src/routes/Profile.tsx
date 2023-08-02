@@ -7,18 +7,19 @@ import {
 import { useFormik } from "formik";
 
 import { useAppSelector } from "../app/hooks";
-import {
-  IUser,
-  UserUpdateBodyReq,
-} from "../features/auth/authType";
+import { IUser } from "../features/auth/authType";
+import { UserUpdateBodyReq } from "../features/user/userType";
 import { useUpdateUserMutation } from "../features/user/userApiSlice";
 import { useNavigate } from "react-router-dom";
+import { ROUTE } from "../consts";
 
 const Profile = () => {
   const navigate = useNavigate();
+
   const { id, first_name, last_name, phone_number } = useAppSelector<IUser>(
     (state) => state.persistedReducer.auth.user as IUser
   );
+
   const [updateUser] = useUpdateUserMutation();
 
   const formik = useFormik({
@@ -36,15 +37,16 @@ const Profile = () => {
 
   return (
     <>
-      <div className="w-full py-20 px-8 relative flex items-center ">
-        <LinkBack to="../overview">Overview</LinkBack>
-        <h1 className="box-border absolute top-[5o%] right-[50%] uppercase font-semibold">
-          {" "}
-          edit profile{" "}
-        </h1>
+      <div className="relative w-full py-20 px-8 flex items-center ">
+        <LinkBack to={`../${ROUTE.OVERVIEW}`} className="font-normal text-sm">
+          Overview
+        </LinkBack>
+        <div className="absolute w-max right-0 left-0 ml-auto mr-auto uppercase font-medium">
+          edit profile
+        </div>
       </div>
       <div className="w-full py-12 px-8 flex flex-row border-b-[#ccc] border-[1px]">
-        <div className="w-4/12 flex justify-start font-semibold uppercase">
+        <div className="w-4/12 flex justify-start text-sm font-medium uppercase">
           personal information
         </div>
         <div className="w-5/12 flex flex-col">
@@ -100,7 +102,7 @@ const Profile = () => {
         <div className="w-3/12 flex"> </div>
       </div>
       <div className="w-full py-12 px-8 flex flex-row border-b-[#ccc] border-[1px]">
-        <div className="w-4/12 flex justify-start font-semibold uppercase">
+        <div className="w-4/12 flex justify-start text-sm font-medium uppercase">
           password
         </div>
         <div className="w-5/12 flex flex-col"></div>

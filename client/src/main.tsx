@@ -7,42 +7,85 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
 
 import store, { persistor } from "./app/store";
-import { Layout, Home, Auth, Account, Overview, Profile } from "./routes";
+import {
+  Home,
+  Auth,
+  Layout,
+  Profile,
+  Account,
+  Section,
+  Loading,
+  Overview,
+  HomeLayout,
+  ProductItem,
+  ProductList,
+  CheckoutLayout,
+} from "./routes";
+import { ROUTE } from "./consts";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Layout />,
+    path: ROUTE.HOME,
+    element: <HomeLayout />,
     children: [
       {
         index: true,
         element: <Home />,
       },
+    ],
+  },
+  {
+    path: ROUTE.LOADING,
+    element: <Loading />,
+  },
+  {
+    path: ROUTE.ABSOLUTE,
+    element: <Layout />,
+    children: [
       {
-        path: "my-account",
+        path: ROUTE.SECTION,
+        element: <Section />,
+        children: [
+          {
+            index: true,
+            element: <ProductList />,
+          },
+          {
+            path: ROUTE.PRODUCT_ITEM,
+            element: <ProductItem />,
+          },
+        ],
+      },
+      {
+        path: ROUTE.ACCOUNT,
         element: <Account />,
         children: [
           {
-            path: "sign-in-register",
+            path: ROUTE.AUTH,
             element: <Auth />,
           },
           {
-            path: "overview",
+            path: ROUTE.OVERVIEW,
             element: <Overview />,
           },
           {
-            path: "profile",
+            path: ROUTE.PROFILE,
             element: <Profile />,
           },
         ],
       },
     ],
   },
+  {
+    path: "checkout/shopping-bag/",
+    element: <CheckoutLayout />,
+  },
 ]);
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
+
 root.render(
   <React.StrictMode>
     <Provider store={store}>

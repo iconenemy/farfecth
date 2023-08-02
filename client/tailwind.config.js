@@ -11,6 +11,9 @@ export default {
     extend: {
       fontFamily: {
         sans: ["Styrene", ...defaultTheme.fontFamily.sans]
+      },
+      backgroundImage: {
+        'main-pattern': "url('/img/model14.jfif')"
       }
     },
   },

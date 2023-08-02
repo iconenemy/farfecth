@@ -1,7 +1,6 @@
 import { apiSlice } from "../../app/api/apiSlice";
-import { IUser, UserUpdateBodyReq, UserUpdateRes, UserUpdateReq} from "../auth/authType";
-
-
+import { IUser} from "../auth/authType";
+import { UserUpdateBodyReq, UserUpdateReq, UserUpdateRes } from "./userType";
 
 export const userApiSliece = apiSlice.injectEndpoints({
   endpoints: (builder) => ({

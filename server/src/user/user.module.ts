@@ -10,7 +10,7 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 
 import { User } from './entities/user.entity';
-import { ParamsValidator } from 'src/middlewares/params.validator';
+import { ParamsValidator } from './middlewares/params.validator';
 
 @Module({
 	imports: [TypeOrmModule.forFeature([User])],

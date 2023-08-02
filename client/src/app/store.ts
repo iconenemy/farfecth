@@ -12,10 +12,13 @@ import {
 import storage from "redux-persist/lib/storage";
 
 import authReducer from "../features/auth/authSlice";
+import cardReducer from "../features/card/cartSlice";
 import { apiSlice } from "./api/apiSlice";
+import { clotherApi } from "../features/clother/clotherApiSlice";
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  card: cardReducer
 });
 
 const persistConfig = {
@@ -28,7 +31,7 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
   reducer: {
     [apiSlice.reducerPath]: apiSlice.reducer,
-    // auth: authReducer
+    [clotherApi.reducerPath]: clotherApi.reducer,
     persistedReducer,
   },
   middleware: (getDefaultMiddleware) =>
@@ -36,7 +39,8 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(apiSlice.middleware),
+    })
+      .concat(apiSlice.middleware, clotherApi.middleware)
 });
 
 export default store;
