@@ -10,18 +10,18 @@ export interface IUser {
     role?: RoleType;
 }
 
-export interface IResSignIn {
+export interface ISignInRes {
     accessToken: string | null;
     refreshToken: string | null;
     user: IUser | null
 }
 
-export interface IReqSignIn {
+export interface ISignInReq {
     email: string;
     password: string;
 }
 
-export interface IReqSignUp {
+export interface ISignUpReq {
     email: string;
     first_name: string;
     last_name: string;
@@ -29,7 +29,7 @@ export interface IReqSignUp {
     phone_number: string;
 }
 
-export interface IResSignUp {
+export interface ISignUpRes {
     id: string;
     email: string;
     first_name: string;
@@ -44,7 +44,7 @@ export interface ITokens {
     refreshToken: string | null;
 }
 
-export interface IResRefresh {
+export interface IRefreshRes {
     accessToken: string | null;
     refreshToken: string | null;
     user: {
@@ -68,6 +68,3 @@ export interface IAuthState {
     isAuth: boolean;
 }
 
-export type UserUpdateBodyReq = Pick<IUser, "first_name" | "last_name" | "phone_number">;
-export type UserUpdateRes = Pick<IUser, "first_name" | "last_name" | "phone_number">
-export type UserUpdateReq = Pick<IUser,  "id" | "first_name" | "last_name" | "phone_number">

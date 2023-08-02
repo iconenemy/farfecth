@@ -1,6 +1,6 @@
-import Login from "./Login";
-import Register from "./Register";
-import RegisterForm from "./RegisterForm";
-import RegisterInfo from "./RegisterInfo";
+import Login from "./login/Login";
+import Register from "./register/Register";
+import RegisterForm from "./register/RegisterForm";
+import RegisterInfo from "./register/RegisterInfo";
 
 export { Login, Register, RegisterForm, RegisterInfo };

@@ -20,7 +20,7 @@ const TextField = ({
   className
 }: Props) => {
   return (
-    <div className={`border-b-2 border-black ${width ? width : "w-full"}`}>
+    <div className={`relative border-b-[1px] border-black ${width ? width : "w-full"}`}>
       <input
         id={id}
         name={name}

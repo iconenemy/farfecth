@@ -7,7 +7,6 @@ import {
 	Param,
 	Put
 } from '@nestjs/common';
-import { RegisterDto } from 'src/auth/dto/auth.dto';
 import { UpdateUserDto } from './dto/user.dto';
 import { UserService } from './user.service';
 

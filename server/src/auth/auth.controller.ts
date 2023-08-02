@@ -12,7 +12,6 @@ import { ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto } from './dto/auth.dto';
 import { GoogleAuthGuard } from './guard/google-auth20.guard';
-import { JwtAuthGuard } from './guard/jwt-auth.guard';
 import { RefreshAuthGuard } from './guard/refresh-auth.guard';
 
 @Controller('auth')

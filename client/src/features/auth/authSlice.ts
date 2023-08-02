@@ -1,21 +1,21 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import {
-  IResSignIn,
   IAuthState,
   IError,
-  IReqSignIn,
-  IResRefresh,
-  IReqSignUp,
-  IResSignUp,
-  IUser,
+  ISignUpRes,
+  IRefreshRes,
+  ISignInReq,
+  ISignInRes,
+  ISignUpReq,
+  IUser
 } from "./authType";
 import { PURGE } from "redux-persist";
 import { apiSlice } from "../../app/api/apiSlice";
 import { userApiSliece } from "../user/userApiSlice";
 
 export const signIn = createAsyncThunk<
-  IResSignIn,
-  IReqSignIn,
+  ISignInRes,
+  ISignInReq,
   { rejectValue: IError }
 >("auth/signInUser", async (loginDto, thunkApi) => {
   const response = await fetch("http://localhost:5000/api/auth/login", {
@@ -29,12 +29,12 @@ export const signIn = createAsyncThunk<
   if (response.status !== 201) {
     return thunkApi.rejectWithValue((await response.json()) as IError);
   }
-  return (await response.json()) as IResSignIn;
+  return (await response.json()) as ISignInRes;
 });
 
 export const signUp = createAsyncThunk<
-  IResSignUp,
-  IReqSignUp,
+  ISignUpRes,
+  ISignUpReq,
   { rejectValue: IError }
 >("auth/signUpUser", async (signUpDto, thunkApi) => {
   const response = await fetch("http://localhost:5000/api/auth/register", {
@@ -48,7 +48,7 @@ export const signUp = createAsyncThunk<
   if (response.status !== 201) {
     return thunkApi.rejectWithValue((await response.json()) as IError);
   }
-  return (await response.json()) as IResSignUp;
+  return (await response.json()) as ISignUpRes;
 });
 
 
@@ -68,7 +68,7 @@ const authSlice = createSlice({
     logout: () => {
       initialState;
     },
-    tokenReceived: (state, action: PayloadAction<IResRefresh>) => {
+    tokenReceived: (state, action: PayloadAction<IRefreshRes>) => {
       state.isAuth = true;
       state.user = action.payload.user;
       state.accessToken = action.payload.accessToken;
@@ -89,7 +89,7 @@ const authSlice = createSlice({
         state.user = payload;
       })
       .addCase(PURGE, () => initialState)
-      .addMatcher(apiSlice.endpoints.refresh.matchFulfilled, (state, action: PayloadAction<IResRefresh>) => {
+      .addMatcher(apiSlice.endpoints.refresh.matchFulfilled, (state, action: PayloadAction<IRefreshRes>) => {
         state.isAuth = true
         state.user = action.payload.user
         state.accessToken = action.payload.accessToken

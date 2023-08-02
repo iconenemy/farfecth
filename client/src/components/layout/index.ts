@@ -1,5 +1,5 @@
 import Header from "./Header";
 import Footer from "./Footer";
-import Filter from "./Filter";
+import Filter from "../filter/Filter";
 
 export { Header, Footer, Filter };

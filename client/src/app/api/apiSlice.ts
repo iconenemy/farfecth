@@ -8,7 +8,7 @@ import {
 import { Mutex } from "async-mutex";
 
 import { logout, tokenReceived } from "../../features/auth/authSlice";
-import { IResRefresh } from "../../features/auth/authType";
+import { IRefreshRes } from "../../features/auth/authType";
 import { RootState, persistor } from "../store";
 
 const mutex = new Mutex();
@@ -43,7 +43,7 @@ const baseQueryWithRefresh: BaseQueryFn<
           api,
           extraOptions
         );
-        const tokens = refreshResult.data as IResRefresh;
+        const tokens = refreshResult.data as IRefreshRes;
 
         if (tokens) {
           api.dispatch(tokenReceived(tokens));
@@ -70,7 +70,7 @@ export const apiSlice = createApi({
   baseQuery: baseQueryWithRefresh,
   tagTypes: ["Auth"],
   endpoints: (builder) => ({
-    refresh: builder.query<IResRefresh, void>({
+    refresh: builder.query<IRefreshRes, void>({
       query: () => ({url: "auth/refresh"})
     })
   }),

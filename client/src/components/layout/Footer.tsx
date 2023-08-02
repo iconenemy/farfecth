@@ -9,7 +9,7 @@ const Footer = () => {
             sign up
           </div>
           <div className="text-start text-[12px] tracking-tight">
-            Sign up below for updates about the world of Burberry, including
+            Sign up below for updates about the world of Icon, including
             collection launches and early access to limited-edition products and
             collaborations.
           </div>
@@ -58,7 +58,7 @@ const Footer = () => {
           assistance.
         </p>
         <p>
-          Burberry Limited, Horseferry House, Horseferry Road, London, SW1P 2AW
+          Icon Limited, Horseferry House, Horseferry Road, London, SW1P 2AW
         </p>
         <p>Registered in England & Wales</p>
         <p>Registered Company Number: 00162636</p>
